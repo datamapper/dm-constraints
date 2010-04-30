@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Dirkjan Bussink"]
-  s.date = %q{2010-03-22}
+  s.date = %q{2010-04-30}
   s.description = %q{DataMapper plugin constraining relationships}
   s.email = %q{d.bussink [a] gmail [d] com}
   s.extra_rdoc_files = [
@@ -17,7 +17,8 @@ Gem::Specification.new do |s|
      "README.rdoc"
   ]
   s.files = [
-    "Gemfile",
+    ".gitignore",
+     "Gemfile",
      "LICENSE",
      "README.rdoc",
      "Rakefile",
@@ -31,6 +32,7 @@ Gem::Specification.new do |s|
      "spec/spec.opts",
      "spec/spec_helper.rb",
      "tasks/ci.rake",
+     "tasks/local_gemfile.rake",
      "tasks/metrics.rake",
      "tasks/spec.rake",
      "tasks/yard.rake",
@@ -42,6 +44,10 @@ Gem::Specification.new do |s|
   s.rubyforge_project = %q{datamapper}
   s.rubygems_version = %q{1.3.6}
   s.summary = %q{DataMapper plugin constraining relationships}
+  s.test_files = [
+    "spec/integration/constraints_spec.rb",
+     "spec/spec_helper.rb"
+  ]
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
