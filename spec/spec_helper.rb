@@ -1,37 +1,10 @@
 require 'rubygems'
-
-# use local dm-core if running from a typical dev checkout.
-lib = File.join('..', '..', 'dm-core', 'lib')
-$LOAD_PATH.unshift(lib) if File.directory?(lib)
-
-# Support running specs with 'rake spec' and 'spec'
-$LOAD_PATH.unshift('lib') unless $LOAD_PATH.include?('lib')
-
 require 'dm-constraints'
 
-ADAPTERS = {}
-def load_driver(name, default_uri)
-  connection_string = ENV["#{name.to_s.upcase}_SPEC_URI"] || default_uri
-  begin
-    adapter = DataMapper.setup(name.to_sym, connection_string)
+require 'dm-migrations'
+require 'dm-core/spec/setup'
 
-    # test the connection if possible
-    if adapter.respond_to?(:query)
-      adapter.select('SELECT 1')
-    end
-
-    ADAPTERS[name] = connection_string
-  rescue LoadError => e
-    warn "Could not load do_#{name}: #{e}"
-    false
-  end
-end
-
-
-HAS_SQLITE3  = load_driver(:sqlite3,  'sqlite3::memory:')
-HAS_MYSQL    = load_driver(:mysql,    'mysql://localhost/dm_core_test')
-HAS_POSTGRES = load_driver(:postgres, 'postgres://postgres@localhost/dm_core_test')
-
+DataMapper::Spec.setup
 
 Spec::Runner.configure do |config|
   config.after :all do

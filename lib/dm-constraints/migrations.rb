@@ -232,7 +232,7 @@ module DataMapper
         include SQL
       end
 
-      module Sqlite3Adapter
+      module SqliteAdapter
         def constraint_exists?(*)
           false
         end
