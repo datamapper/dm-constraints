@@ -1,43 +1,12 @@
 require 'dm-core'
 
 require 'dm-constraints/delete_constraint'
-require 'dm-constraints/migrations'
+require 'dm-constraints/relationships'
 
 module DataMapper
-  module Associations
-    class OneToMany::Relationship
-      include DataMapper::Hook
-      include Constraints::DeleteConstraint
-
-      OPTIONS << :constraint
-
-      attr_reader :constraint
-
-      # initialize is a private method in Relationship
-      # and private methods can not be "advised" (hooked into)
-      # in extlib.
-      with_changed_method_visibility(:initialize, :private, :public) do
-        before :initialize, :add_constraint_option
-      end
-    end
-
-    class ManyToMany::Relationship
-
-      OPTIONS << :constraint
-
-      private
-
-      # TODO: document
-      # @api semipublic
-      chainable do
-        def one_to_many_options
-          super.merge(:constraint => @constraint)
-        end
-      end
-    end
-  end
 
   module Constraints
+
     include DeleteConstraint
 
     module ClassMethods
@@ -59,15 +28,61 @@ module DataMapper
       RUBY
     end
 
-    Model.append_inclusions self
-  end
-
-  module Migrations
-    constants.each do |const_name|
-      if Constraints::Migrations.const_defined?(const_name)
-        mod = const_get(const_name)
-        mod.send(:include, Constraints::Migrations.const_get(const_name))
+    def self.include_constraint_api
+      DataMapper::Repository.adapters.values.each do |adapter|
+        Adapters.include_constraint_api(ActiveSupport::Inflector.demodulize(adapter.class.name))
       end
     end
-  end
-end
+
+    Model.append_inclusions self
+
+  end # module Constraints
+
+  module Adapters
+
+    extend Chainable
+
+    class << self
+
+      def include_constraint_api(const_name)
+        require constraint_extensions(const_name)
+        if Constraints::Adapters.const_defined?(const_name)
+          require 'dm-constraints/migrations'
+          DataMapper.extend(Constraints::Migrations::SingletonMethods)
+          DataMapper::Model.extend(Constraints::Migrations::Model)
+          DataMapper::Model.append_extensions(Constraints::Migrations::Model)
+          adapter = const_get(const_name)
+          adapter.send(:include, constraint_module(const_name))
+        end
+      rescue LoadError
+        # do nothing
+      end
+
+      def constraint_module(const_name)
+        Constraints::Adapters.const_get(const_name)
+      end
+
+    private
+
+      # @api private
+      def constraint_extensions(const_name)
+        name = adapter_name(const_name)
+        name = 'do' if name == 'dataobjects'
+        "dm-constraints/adapters/dm-#{name}-adapter"
+      end
+
+    end
+
+    extendable do
+      # @api private
+      def const_added(const_name)
+        include_constraint_api(const_name)
+        super
+      end
+    end
+
+  end # module Adapters
+
+  Constraints.include_constraint_api
+
+end # module DataMapper
