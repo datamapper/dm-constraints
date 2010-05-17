@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Dirkjan Bussink"]
-  s.date = %q{2010-05-04}
+  s.date = %q{2010-05-18}
   s.description = %q{DataMapper plugin constraining relationships}
   s.email = %q{d.bussink [a] gmail [d] com}
   s.extra_rdoc_files = [
@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
      "VERSION",
      "dm-constraints.gemspec",
      "lib/dm-constraints.rb",
+     "lib/dm-constraints/adapters/dm-abstract-adapter.rb",
      "lib/dm-constraints/adapters/dm-do-adapter.rb",
      "lib/dm-constraints/adapters/dm-mysql-adapter.rb",
      "lib/dm-constraints/adapters/dm-oracle-adapter.rb",
@@ -70,18 +71,15 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<dm-core>, ["~> 0.10.3"])
       s.add_runtime_dependency(%q<dm-migrations>, ["~> 0.10.3"])
       s.add_development_dependency(%q<rspec>, ["~> 1.3"])
-      s.add_development_dependency(%q<yard>, ["~> 0.5"])
     else
       s.add_dependency(%q<dm-core>, ["~> 0.10.3"])
       s.add_dependency(%q<dm-migrations>, ["~> 0.10.3"])
       s.add_dependency(%q<rspec>, ["~> 1.3"])
-      s.add_dependency(%q<yard>, ["~> 0.5"])
     end
   else
     s.add_dependency(%q<dm-core>, ["~> 0.10.3"])
     s.add_dependency(%q<dm-migrations>, ["~> 0.10.3"])
     s.add_dependency(%q<rspec>, ["~> 1.3"])
-    s.add_dependency(%q<yard>, ["~> 0.5"])
   end
 end
 

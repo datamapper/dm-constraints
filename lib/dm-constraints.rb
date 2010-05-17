@@ -1,9 +1,18 @@
 require 'dm-core'
 
+require 'dm-constraints/migrations'
 require 'dm-constraints/delete_constraint'
 require 'dm-constraints/relationships'
+require 'dm-constraints/adapters/dm-abstract-adapter'
 
 module DataMapper
+
+  extend Constraints::Migrations::SingletonMethods
+
+  module Model
+    extend DataMapper::Constraints::Migrations::Model
+    append_extensions DataMapper::Constraints::Migrations::Model
+  end
 
   module Constraints
 
@@ -30,7 +39,7 @@ module DataMapper
 
     def self.include_constraint_api
       DataMapper::Repository.adapters.values.each do |adapter|
-        Adapters.include_constraint_api(ActiveSupport::Inflector.demodulize(adapter.class.name))
+        DataMapper::Adapters.include_constraint_api(ActiveSupport::Inflector.demodulize(adapter.class.name))
       end
     end
 
@@ -40,6 +49,10 @@ module DataMapper
 
   module Adapters
 
+    class AbstractAdapter
+      include DataMapper::Constraints::Adapters::AbstractAdapter
+    end
+
     extend Chainable
 
     class << self
@@ -47,10 +60,6 @@ module DataMapper
       def include_constraint_api(const_name)
         require constraint_extensions(const_name)
         if Constraints::Adapters.const_defined?(const_name)
-          require 'dm-constraints/migrations'
-          DataMapper.extend(Constraints::Migrations::SingletonMethods)
-          DataMapper::Model.extend(Constraints::Migrations::Model)
-          DataMapper::Model.append_extensions(Constraints::Migrations::Model)
           adapter = const_get(const_name)
           adapter.send(:include, constraint_module(const_name))
         end
