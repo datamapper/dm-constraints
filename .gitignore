@@ -18,10 +18,10 @@ coverage
 rdoc
 pkg
 .gem
+.bundle
+Gemfile.{lock,local}
+*.rbc
 
 ## PROJECT::SPECIFIC
-.bundle
-Gemfile.local
 spec/db
 spec/log
-
