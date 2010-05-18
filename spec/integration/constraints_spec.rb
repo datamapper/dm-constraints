@@ -3,6 +3,13 @@ require 'spec_helper'
 describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
   supported_by :all do
     before :all do
+      @in_memory = defined?(DataMapper::Adapters::InMemoryAdapter) && @adapter.kind_of?(DataMapper::Adapters::InMemoryAdapter)
+      @yaml      = defined?(DataMapper::Adapters::YamlAdapter)     && @adapter.kind_of?(DataMapper::Adapters::YamlAdapter)
+
+      @skip = @in_memory || @yaml
+    end
+
+    before :all do
       class ::Article
         include DataMapper::Resource
 
@@ -180,6 +187,10 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
 
         describe 'many-to-many associations' do
           before do
+            pending 'The adapter does not support m:m associations yet' if @skip
+          end
+
+          before do
             @author         = Author.create(:first_name => 'John', :last_name => 'Doe')
             @another_author = Author.create(:first_name => 'Joe',  :last_name => 'Smith')
             @article        = Article.create(:title => 'Man on the Moon', :authors => [ @author ])
@@ -275,6 +286,10 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
 
         describe 'many-to-many associations' do
           before do
+            pending 'The adapter does not support m:m associations yet' if @skip
+          end
+
+          before do
             @article       = Article.create(:title => 'Man on the Moon')
             @other_article = Article.create(:title => 'Dolly cloned')
             @author        = Author.create(:first_name => 'John', :last_name => 'Doe', :articles => [ @article, @other_article ])
@@ -369,6 +384,10 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
         end
 
         describe 'many-to-many associations' do
+          before do
+            pending 'The adapter does not support m:m associations yet' if @skip
+          end
+
           before do
             @article       = Article.create(:title => 'Man on the Moon')
             @other_article = Article.create(:title => 'Dolly cloned')
@@ -537,6 +556,10 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
         end
 
         describe 'many-to-many associations' do
+          before do
+            pending 'The adapter does not support m:m associations yet' if @skip
+          end
+
           before do
             @article       = Article.create(:title => 'Man on the Moon')
             @other_article = Article.create(:title => 'Dolly cloned')
