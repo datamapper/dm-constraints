@@ -64,7 +64,8 @@ module DataMapper
           adapter.send(:include, constraint_module(const_name))
         end
       rescue LoadError
-        # do nothing
+        # Silently ignore the fact that no adapter extensions could be required
+        # This means that the adapter in use doesn't support constraints
       end
 
       def constraint_module(const_name)
