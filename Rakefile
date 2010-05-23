@@ -10,7 +10,7 @@ begin
     gem.summary     = 'DataMapper plugin constraining relationships'
     gem.description = gem.summary
     gem.email       = 'd.bussink [a] gmail [d] com'
-    gem.homepage    = 'http://github.com/datamapper/dm-more/tree/master/%s' % gem.name
+    gem.homepage    = 'http://github.com/datamapper/%s' % gem.name
     gem.authors     = [ 'Dirkjan Bussink' ]
 
     gem.rubyforge_project = 'datamapper'
