@@ -92,12 +92,12 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
       end
 
       it 'should destroy the parent if there are no children in the association' do
-        @article.destroy.should be_true
+        @article.destroy.should be(true)
         @article.model.get(*@article.key).should be_nil
       end
 
       it 'the child should be destroyable' do
-        @revision.destroy.should be_true
+        @revision.destroy.should be(true)
         @revision.model.get(*@revision.key).should be_nil
       end
     end
@@ -112,12 +112,12 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
         end
 
         it 'should destroy the parent if there are no children in the association' do
-          @author.destroy.should be_true
+          @author.destroy.should be(true)
           @author.model.get(*@author.key).should be_nil
         end
 
         it 'should not destroy the parent if there are children in the association' do
-          @other_author.destroy.should be_false
+          @other_author.destroy.should be(false)
           @other_author.model.get(*@other_author.key).should_not be_nil
         end
       end
@@ -152,12 +152,12 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
           end
 
           it 'should not destroy the parent if there are children in the association' do
-            @article.destroy.should be_false
+            @article.destroy.should be(false)
             @article.model.get(*@article.key).should_not be_nil
           end
 
           it 'the child should be destroyable' do
-            @revision.destroy.should be_true
+            @revision.destroy.should be(true)
             @revision.model.get(*@revision.key).should be_nil
           end
         end
@@ -171,16 +171,16 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
           end
 
           it 'should destroy the parent if there are no children in the association' do
-            @author.destroy.should be_true
+            @author.destroy.should be(true)
             @author.model.get(*@author.key).should be_nil
           end
 
           it 'should not destroy the parent if there are children in the association' do
-            @another_author.destroy.should be_false
+            @another_author.destroy.should be(false)
           end
 
           it 'the child should be destroyable' do
-            @comment.destroy.should be_true
+            @comment.destroy.should be(true)
             @comment.model.get(*@comment.key).should be_nil
           end
         end
@@ -197,18 +197,18 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
           end
 
           it 'should destroy the parent if there are no children in the association' do
-            @another_author.destroy.should be_true
+            @another_author.destroy.should be(true)
             @another_author.model.get(*@another_author.key).should be_nil
           end
 
           it 'should not destroy the parent if there are children in the association' do
             @author.articles.should_not == []
-            @author.destroy.should be_false
+            @author.destroy.should be(false)
           end
 
           it 'the child should be destroyable' do
             @article.authors.clear
-            @article.save.should be_true
+            @article.save.should be(true)
             @article.authors.should be_empty
           end
         end
@@ -244,18 +244,18 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
           end
 
           it 'should let the parent to be destroyed' do
-            @article.destroy.should be_true
+            @article.destroy.should be(true)
             @article.model.get(*@article.key).should be_nil
           end
 
           it 'should destroy the children' do
             revision = @article.revision
-            @article.destroy.should be_true
+            @article.destroy.should be(true)
             revision.model.get(*revision.key).should be_nil
           end
 
           it 'the child should be destroyable' do
-            @revision.destroy.should be_true
+            @revision.destroy.should be(true)
             @revision.model.get(*@revision.key).should be_nil
           end
         end
@@ -269,17 +269,17 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
           end
 
           it 'should let the parent to be destroyed' do
-            @author.destroy.should be_true
+            @author.destroy.should be(true)
             @author.model.get(*@author.key).should be_nil
           end
 
           it 'should destroy the children' do
-            @author.destroy.should be_true
+            @author.destroy.should be(true)
             @author.comments.all? { |comment| comment.should be_new }
           end
 
           it 'the child should be destroyable' do
-            @comment.destroy.should be_true
+            @comment.destroy.should be(true)
             @comment.model.get(*@comment.key).should be_nil
           end
         end
@@ -296,18 +296,18 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
           end
 
           it 'should let the parent to be destroyed' do
-            @author.destroy.should be_true
+            @author.destroy.should be(true)
             @author.model.get(*@author.key).should be_nil
           end
 
           it 'should destroy the children' do
-            @author.destroy.should be_true
+            @author.destroy.should be(true)
             @article.model.get(*@article.key).should be_nil
             @other_article.model.get(*@other_article.key).should be_nil
           end
 
           it 'the child should be destroyable' do
-            @article.destroy.should be_true
+            @article.destroy.should be(true)
             @article.model.get(*@article.key).should be_nil
           end
         end
@@ -343,18 +343,18 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
           end
 
           it 'should let the parent to be destroyed' do
-            @article.destroy.should be_true
+            @article.destroy.should be(true)
             @article.model.get(*@article.key).should be_nil
           end
 
           it 'should destroy the children' do
             revision = @article.revision
-            @article.destroy.should be_true
+            @article.destroy.should be(true)
             revision.model.get(*revision.key).should be_nil
           end
 
           it 'the child should be destroyable' do
-            @revision.destroy.should be_true
+            @revision.destroy.should be(true)
             @revision.model.get(*@revision.key).should be_nil
           end
         end
@@ -368,17 +368,17 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
           end
 
           it 'should let the parent to be destroyed' do
-            @author.destroy.should be_true
+            @author.destroy.should be(true)
             @author.model.get(*@author.key).should be_nil
           end
 
           it 'should destroy the children' do
-            @author.destroy.should be_true
+            @author.destroy.should be(true)
             @author.comments.all? { |comment| comment.should be_new }
           end
 
           it 'the child should be destroyable' do
-            @comment.destroy.should be_true
+            @comment.destroy.should be(true)
             @comment.model.get(*@comment.key).should be_nil
           end
         end
@@ -395,7 +395,7 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
           end
 
           it 'should destroy the parent and the children, too' do
-            @author.destroy.should be_true
+            @author.destroy.should be(true)
             @author.model.get(*@author.key).should be_nil
 
             @article.model.get(*@article.key).should be_nil
@@ -403,7 +403,7 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
           end
 
           it 'the child should be destroyable' do
-            @article.destroy.should be_true
+            @article.destroy.should be(true)
             @article.model.get(*@article.key).should be_nil
           end
         end
@@ -440,19 +440,19 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
           end
 
           it 'should let the parent to be destroyed' do
-            @article.destroy.should be_true
+            @article.destroy.should be(true)
             @article.model.get(*@article.key).should be_nil
           end
 
           it "should set the child's foreign_key id to nil" do
             revision = @article.revision
-            @article.destroy.should be_true
+            @article.destroy.should be(true)
             revision.article.should be_nil
             revision.model.get(*revision.key).article.should be_nil
           end
 
           it 'the child should be destroyable' do
-            @revision.destroy.should be_true
+            @revision.destroy.should be(true)
             @revision.model.get(*@revision.key).should be_nil
           end
         end
@@ -465,20 +465,20 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
           end
 
           it 'should let the parent to be destroyed' do
-            @author.destroy.should be_true
+            @author.destroy.should be(true)
             @author.model.get(*@author.key).should be_nil
           end
 
           it 'should set the foreign_key ids of children to nil' do
-            @author.destroy.should be_true
+            @author.destroy.should be(true)
             @author.comments.all? { |comment| comment.author.should be_nil }
           end
 
           it 'the children should be destroyable' do
-            @comment.destroy.should be_true
+            @comment.destroy.should be(true)
             @comment.model.get(*@comment.key).should be_nil
 
-            @other_comment.destroy.should be_true
+            @other_comment.destroy.should be(true)
             @other_comment.model.get(*@other_comment.key).should be_nil
           end
         end
@@ -514,17 +514,17 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
           end
 
           it 'should let the parent be destroyed' do
-            @article.destroy.should be_true
+            @article.destroy.should be(true)
             @article.model.get(*@article.key).should be_nil
           end
 
           it 'should let the children become orphan records' do
-            @article.destroy.should be_true
+            @article.destroy.should be(true)
             @revision.model.get(*@revision.key).article.should be_nil
           end
 
           it 'the child should be destroyable' do
-            @revision.destroy.should be_true
+            @revision.destroy.should be(true)
             @revision.model.get(*@revision.key).should be_nil
           end
         end
@@ -538,19 +538,19 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
           end
 
           it 'should let the parent to be destroyed' do
-            @author.destroy.should be_true
+            @author.destroy.should be(true)
             @author.model.get(*@author.key).should be_nil
           end
 
           it 'should let the children become orphan records' do
-            @author.destroy.should be_true
+            @author.destroy.should be(true)
             @comment.model.get(*@comment.key).author.should be_nil
             @other_comment.model.get(*@other_comment.key).author.should be_nil
           end
 
           it 'the children should be destroyable' do
-            @comment.destroy.should be_true
-            @other_comment.destroy.should be_true
+            @comment.destroy.should be(true)
+            @other_comment.destroy.should be(true)
             @other_comment.model.get(*@other_comment.key).should be_nil
           end
         end
@@ -567,7 +567,7 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
           end
 
           it 'the children should be destroyable' do
-            @article.destroy.should be_true
+            @article.destroy.should be(true)
             @article.model.get(*@article.key).should be_nil
           end
         end
