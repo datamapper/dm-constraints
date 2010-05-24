@@ -53,25 +53,22 @@ module DataMapper
       include DataMapper::Constraints::Adapters::AbstractAdapter
     end
 
-    extend Chainable
+    def self.include_constraint_api(const_name)
+      require constraint_extensions(const_name)
+      if Constraints::Adapters.const_defined?(const_name)
+        adapter = const_get(const_name)
+        adapter.send(:include, constraint_module(const_name))
+      end
+    rescue LoadError
+      # Silently ignore the fact that no adapter extensions could be required
+      # This means that the adapter in use doesn't support constraints
+    end
+
+    def self.constraint_module(const_name)
+      Constraints::Adapters.const_get(const_name)
+    end
 
     class << self
-
-      def include_constraint_api(const_name)
-        require constraint_extensions(const_name)
-        if Constraints::Adapters.const_defined?(const_name)
-          adapter = const_get(const_name)
-          adapter.send(:include, constraint_module(const_name))
-        end
-      rescue LoadError
-        # Silently ignore the fact that no adapter extensions could be required
-        # This means that the adapter in use doesn't support constraints
-      end
-
-      def constraint_module(const_name)
-        Constraints::Adapters.const_get(const_name)
-      end
-
     private
 
       # @api private
