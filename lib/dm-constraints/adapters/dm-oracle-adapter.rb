@@ -42,10 +42,6 @@ module DataMapper
           SQL
         end
 
-        def drop_table_statement(model)
-          table_name = quote_name(model.storage_name(name))
-          "DROP TABLE #{table_name} CASCADE_CONSTRAINTS"
-        end
       end
     end
   end
