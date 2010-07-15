@@ -39,7 +39,7 @@ module DataMapper
 
     def self.include_constraint_api
       DataMapper::Adapters::AbstractAdapter.descendants.each do |adapter_class|
-        DataMapper::Adapters.include_constraint_api(ActiveSupport::Inflector.demodulize(adapter_class.name))
+        DataMapper::Adapters.include_constraint_api(DataMapper::Inflector.demodulize(adapter_class.name))
       end
     end
 
