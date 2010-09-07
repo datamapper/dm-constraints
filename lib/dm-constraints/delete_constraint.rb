@@ -17,7 +17,7 @@ module DataMapper
         #
         # @param options [Hash] options hash
         #
-        # @raises ArgumentError
+        # @raise ArgumentError
         #
         # @return [nil]
         #
@@ -52,7 +52,7 @@ module DataMapper
         #
         # @param block [Proc] proc to run
         #
-        # @notes  TODO: this should be moved to a 'util-like' module
+        # @note  TODO: this should be moved to a 'util-like' module
         #
         # @return [nil]
         #
@@ -82,13 +82,11 @@ module DataMapper
       ##
       # Checks delete constraints prior to destroying a dm resource or collection
       #
-      # @throws :halt
-      #
-      # @notes
+      # @note
       #   - It only considers a relationship's constraints if this is the parent model (ie a child shouldn't delete a parent)
       #   - Many to Many Relationships are skipped, as they are evaluated by their underlying 1:M relationships
       #
-      # @returns [nil]
+      # @return [nil]
       #
       # @api semi-public
       def check_delete_constraints
