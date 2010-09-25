@@ -78,7 +78,8 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
 
       supported_by :postgres, :mysql do
         it 'should not be able to create related objects with a failing foreign key constraint' do
-          pending_if 'JRuby throws a DataObjects::SQLError for integrity errors, which is wrong', RUBY_ENGINE == 'jruby' do
+          jruby = Object.const_defined?('RUBY_ENGINE') ? RUBY_ENGINE == 'jruby' : false
+          pending_if 'JRuby throws a DataObjects::SQLError for integrity errors, which is wrong', jruby do
             article = Article.create(:title => 'Man on the Moon')
             lambda { Comment.create(:body => 'So true!', :article_id => article.id + 1) }.should raise_error(DataObjects::IntegrityError)
           end
