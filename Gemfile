@@ -5,12 +5,12 @@ source 'http://rubygems.org'
 SOURCE       = ENV['SOURCE']   ? ENV['SOURCE'].to_sym              : :git
 REPO_POSTFIX = SOURCE == :path ? ''                                : '.git'
 DATAMAPPER   = SOURCE == :path ? Pathname(__FILE__).dirname.parent : 'http://github.com/datamapper'
-DM_VERSION = '~> 1.0.2'
+DM_VERSION   = '~> 1.0.2'
 
 group :runtime do # Runtime dependencies (as in the gemspec)
 
   if ENV['EXTLIB']
-    gem 'extlib',        '~> 0.9.15', SOURCE => "#{DATAMAPPER}/extlib#{REPO_POSTFIX}"
+    gem 'extlib',        '~> 0.9.15', SOURCE => "#{DATAMAPPER}/extlib#{REPO_POSTFIX}", :require => nil
   else
     gem 'activesupport', '~> 3.0.3', :require => nil
   end
