@@ -47,7 +47,7 @@ module DataMapper
           adapter = DataMapper.repository(repository_name).adapter
           return unless adapter.respond_to?(method)
 
-          relationships(repository_name).each_value do |relationship|
+          relationships(repository_name).each do |relationship|
             adapter.send(method, relationship)
           end
         end

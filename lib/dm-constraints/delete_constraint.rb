@@ -90,7 +90,7 @@ module DataMapper
       #
       # @api semi-public
       def check_delete_constraints
-        relationships.each_value do |relationship|
+        relationships.each do |relationship|
           next unless relationship.respond_to?(:constraint)
           next unless association = relationship.get(self)
 
