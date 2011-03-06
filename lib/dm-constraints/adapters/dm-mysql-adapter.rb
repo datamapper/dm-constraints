@@ -24,7 +24,7 @@ module DataMapper
           #
           # @api private
           def destroy_constraints_statement(storage_name, constraint_name)
-            <<-SQL.compress_lines
+            DataMapper::Ext::String.compress_lines(<<-SQL)
               ALTER TABLE #{quote_name(storage_name)}
               DROP FOREIGN KEY #{quote_name(constraint_name)}
             SQL
