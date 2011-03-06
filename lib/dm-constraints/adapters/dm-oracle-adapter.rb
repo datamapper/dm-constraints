@@ -12,7 +12,7 @@ module DataMapper
         # @see DataMapper::Constraints::Adapters::DataObjectsAdapter
         # @api private
         def constraint_exists?(storage_name, constraint_name)
-          statement = <<-SQL.compress_lines
+          statement = DataMapper::Ext::String.compress_lines(<<-SQL)
             SELECT COUNT(*)
             FROM USER_CONSTRAINTS
             WHERE table_name = ?
@@ -25,7 +25,7 @@ module DataMapper
 
         # @see DataMapper::Constraints::Adapters::DataObjectsAdapter#create_constraints_statement
         def create_constraints_statement(storage_name, constraint_name, constraint_type, foreign_keys, reference_storage_name, reference_keys)
-          <<-SQL.compress_lines
+          DataMapper::Ext::String.compress_lines(<<-SQL)
             ALTER TABLE #{quote_name(storage_name)}
             ADD CONSTRAINT #{quote_name(constraint_name)}
             FOREIGN KEY (#{foreign_keys.join(', ')})
@@ -35,7 +35,7 @@ module DataMapper
         end
 
         def destroy_constraints_statement(storage_name, constraint_name)
-          <<-SQL.compress_lines
+          DataMapper::Ext::String.compress_lines(<<-SQL)
             ALTER TABLE #{quote_name(storage_name)}
             DROP CONSTRAINT #{quote_name(constraint_name)}
             CASCADE
