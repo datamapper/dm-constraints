@@ -19,11 +19,11 @@ module DataMapper
         def constraint_exists?(storage_name, constraint_name)
           statement = DataMapper::Ext::String.compress_lines(<<-SQL)
             SELECT COUNT(*)
-            FROM "information_schema"."table_constraints"
-            WHERE "constraint_type" = 'FOREIGN KEY'
-            AND "table_schema" = ?
-            AND "table_name" = ?
-            AND "constraint_name" = ?
+            FROM #{quote_name('information_schema')}.#{quote_name('table_constraints')}
+            WHERE #{quote_name('constraint_type')} = 'FOREIGN KEY'
+            AND #{quote_name('table_schema')} = ?
+            AND #{quote_name('table_name')} = ?
+            AND #{quote_name('constraint_name')} = ?
           SQL
 
           select(statement, schema_name, storage_name, constraint_name).first > 0
