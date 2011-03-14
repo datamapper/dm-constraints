@@ -1,5 +1,3 @@
-require 'dm-core/ext/string'
-
 module DataMapper
   module Constraints
     module Adapters
