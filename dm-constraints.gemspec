@@ -7,9 +7,9 @@ Gem::Specification.new do |s|
   s.name = %q{dm-constraints}
   s.version = "1.1.0"
 
-  s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
+  s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Dirkjan Bussink"]
-  s.date = %q{2011-03-10}
+  s.date = %q{2011-03-16}
   s.description = %q{DataMapper plugin constraining relationships}
   s.email = %q{d.bussink [a] gmail [d] com}
   s.extra_rdoc_files = [
