@@ -34,12 +34,14 @@ By default a relationship will PROTECT its children.
 === Examples
 
   # 1:M Example
-  class Farmer
-    has n, :pigs #equivalent to: has n, :pigs, :constraint => :protect
+  class Post
+    has n, :comments
+    # equivalent to: 
+    # has n, :comments, :constraint => :protect
   end
 
   # M:M Example
-  class Articles
+  class Article
     has n, :tags, :through => Resource, :constraint => :destroy
   end
 
@@ -51,6 +53,6 @@ By default a relationship will PROTECT its children.
   # are automatically inherited from the M:M relationship.
 
   # 1:1 Example
-  class Farmer
-    has 1, :beloved_sheep, :constraint => :protect
+  class User
+    has 1, :address, :constraint => :protect
   end
