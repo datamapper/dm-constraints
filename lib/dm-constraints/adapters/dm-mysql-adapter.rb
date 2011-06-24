@@ -14,13 +14,7 @@ module DataMapper
           ##
           # MySQL specific query to drop a foreign key
           #
-          # @param storage_name [String]
-          #   name of table to constrain
-          # @param constraint_name [String]
-          #   name of foreign key constraint
-          #
-          # @return [String]
-          #   SQL DDL Statement to destroy a constraint
+          # @see DataMapper::Constraints::Adapters::DataObjectsAdapter#destroy_constraints_statement
           #
           # @api private
           def destroy_constraints_statement(storage_name, constraint_name)
