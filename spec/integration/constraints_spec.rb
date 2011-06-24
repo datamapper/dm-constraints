@@ -81,7 +81,9 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
           jruby = defined?(RUBY_ENGINE) && RUBY_ENGINE == 'jruby'
           pending_if 'JRuby throws a DataObjects::SQLError for integrity errors, which is wrong', jruby do
             article = Article.create(:title => 'Man on the Moon')
-            lambda { Comment.create(:body => 'So true!', :article_id => article.id + 1) }.should raise_error(DataObjects::IntegrityError)
+            lambda {
+              Comment.create(:body => 'So true!', :article_id => article.id + 1)
+            }.should raise_error(DataObjects::IntegrityError)
           end
         end
       end
