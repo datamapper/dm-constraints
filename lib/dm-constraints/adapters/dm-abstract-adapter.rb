@@ -1,7 +1,8 @@
+require "data_mapper/constraints/adapters/extension"
+
 module DataMapper
   module Constraints
     module Adapters
-
       module AbstractAdapter
 
         def constraint_exists?(*)
@@ -15,8 +16,18 @@ module DataMapper
         def destroy_relationship_constraint(*)
           false
         end
-      end
 
-    end
+      end # module AbstractAdapter
+    end # module Adapters
+  end # module Constraints
+
+  Adapters::AbstractAdapter.class_eval do
+    include Constraints::Adapters::AbstractAdapter
   end
-end
+
+  Adapters::AbstractAdapter.descendants.each do |adapter_class|
+    const_name = DataMapper::Inflector.demodulize(adapter_class.name)
+    Adapters.include_constraint_api(const_name)
+  end
+
+end # module DataMapper
