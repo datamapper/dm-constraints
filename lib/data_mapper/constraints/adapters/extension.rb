@@ -4,7 +4,7 @@ module DataMapper
       module Extension
         # Include the corresponding Constraints module into a adapter class
         # 
-        # @param [String] const_name
+        # @param [Symbol] const_name
         #   demodulized name of the adapter class to include corresponding
         #   constraints module into
         # 
