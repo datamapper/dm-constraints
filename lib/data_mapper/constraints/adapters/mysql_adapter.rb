@@ -1,4 +1,4 @@
-require 'dm-constraints/adapters/dm-do-adapter'
+require 'data_mapper/constraints/adapters/do_adapter'
 
 module DataMapper
   module Constraints

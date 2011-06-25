@@ -9,9 +9,8 @@ require 'data_mapper/constraints/migrations/singleton_methods'
 require 'data_mapper/constraints/relationship/one_to_many'
 require 'data_mapper/constraints/relationship/many_to_many'
 
-require "data_mapper/constraints/adapters/extension"
-
-require 'dm-constraints/adapters/dm-abstract-adapter'
+require 'data_mapper/constraints/adapters/extension'
+require 'data_mapper/constraints/adapters/abstract_adapter'
 
 module DataMapper
   module Constraints

@@ -32,7 +32,7 @@ module DataMapper
         def constraint_extensions(const_name)
           name = adapter_name(const_name)
           name = 'do' if name == 'dataobjects'
-          "dm-constraints/adapters/dm-#{name}-adapter"
+          "data_mapper/constraints/adapters/#{name}_adapter"
         end
 
         # @api private
