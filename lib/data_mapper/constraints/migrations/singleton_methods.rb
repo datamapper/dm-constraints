@@ -4,31 +4,42 @@ module DataMapper
       module SingletonMethods
 
         def auto_migrate!(repository_name = nil)
-          repository_execute(:auto_migrate_down_constraints!, repository_name)
-          descendants = super
-          repository_execute(:auto_migrate_up_constraints!, repository_name)
-          descendants
+          auto_migrate_constraints_down(repository_name)
+          # TODO: Model#auto_migrate! drops and adds constraints, as well.
+          #   is that an avoidable duplication?
+          super
+          auto_migrate_constraints_up(repository_name)
+          self
         end
 
       private
 
         def auto_migrate_down!(repository_name = nil)
-          repository_execute(:auto_migrate_down_constraints!, repository_name)
+          auto_migrate_constraints_down(repository_name)
           super
+          self
         end
 
         def auto_migrate_up!(repository_name = nil)
-          descendants = super
-          repository_execute(:auto_migrate_up_constraints!, repository_name)
-          descendants
+          super
+          auto_migrate_constraints_up(repository_name)
+          self
         end
 
         # @api private
-        def repository_execute(method, repository_name)
+        def auto_migrate_constraints_up(repository_name = nil)
           DataMapper::Model.descendants.each do |model|
-            model.send(method, repository_name || model.default_repository_name)
+            model.auto_migrate_constraints_up(repository_name || model.default_repository_name)
           end
         end
+
+        # @api private
+        def auto_migrate_constraints_down(repository_name = nil)
+          DataMapper::Model.descendants.each do |model|
+            model.auto_migrate_constraints_down(repository_name || model.default_repository_name)
+          end
+        end
+
       end # module SingletonMethods
     end # module Migrations
   end # module Constraints

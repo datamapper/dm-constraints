@@ -7,36 +7,34 @@ module DataMapper
     module Migrations
       module Model
 
+        # @api public
         def auto_migrate!(repository_name = self.repository_name)
-          auto_migrate_down_constraints!(repository_name)
+          auto_migrate_constraints_down(repository_name)
           super
-          auto_migrate_up_constraints!(repository_name)
+          auto_migrate_constraints_up(repository_name)
         end
 
-      private
+        # @api private
+        def auto_migrate_constraints_up(repository_name = self.repository_name)
+          # TODO: this check should not be here
+          return if self.respond_to?(:is_remixable?) && self.is_remixable?
+
+          relationships(repository_name).each do |relationship|
+            relationship.auto_migrate_constraints_up(repository_name)
+          end
+        end
 
         # @api private
-        # 
-        # @todo rename #auto_migrate_constraints_down!
-        def auto_migrate_down_constraints!(repository_name = self.repository_name)
+        def auto_migrate_constraints_down(repository_name = self.repository_name)
           return unless storage_exists?(repository_name)
-          # FIXME: this check should not be here
+          # TODO: this check should not be here
           return if self.respond_to?(:is_remixable?) && self.is_remixable?
 
           relationships(repository_name).each do |relationship|
-            relationship.auto_migrate_down(repository_name)
+            relationship.auto_migrate_constraints_down(repository_name)
           end
         end
 
-        # @api private
-        def auto_migrate_up_constraints!(repository_name = self.repository_name)
-          # FIXME: this check should not be here
-          return if self.respond_to?(:is_remixable?) && self.is_remixable?
-
-          relationships(repository_name).each do |relationship|
-            relationship.auto_migrate_up(repository_name)
-          end
-        end
       end # module Model
     end # module Migrations
   end # module Constraints

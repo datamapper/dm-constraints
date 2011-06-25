@@ -1,10 +1,10 @@
 shared_examples_for "require 'dm-constraints'" do
 
   it "extends Model descendants with the constraint API" do
-    DataMapper::Model.descendants.any?.should be(true)
+    DataMapper::Model.descendants.should_not be_empty
     DataMapper::Model.descendants.all? do |model|
-      model.respond_to?(:auto_migrate_down_constraints!, true).should be(true)
-      model.respond_to?(:auto_migrate_up_constraints!,   true).should be(true)
+      model.respond_to?(:auto_migrate_constraints_down, true).should be(true)
+      model.respond_to?(:auto_migrate_constraints_up,   true).should be(true)
     end
   end
 

@@ -3,26 +3,28 @@ module DataMapper
     module Migrations
       module Relationship
         # @api private
-        def auto_migrate_down(repository_name)
+        def auto_migrate_constraints_up(repository_name)
           # no-op
         end
 
         # @api private
-        def auto_migrate_up(repository_name)
+        def auto_migrate_constraints_down(repository_name)
           # no-op
         end
 
         module ManyToOne
           # @api private
-          def auto_migrate_down(repository_name)
+          def auto_migrate_constraints_up(repository_name)
             adapter = DataMapper.repository(repository_name).adapter
-            adapter.destroy_relationship_constraint(self)
+            adapter.create_relationship_constraint(self)
+            self
           end
 
           # @api private
-          def auto_migrate_up(repository_name)
+          def auto_migrate_constraints_down(repository_name)
             adapter = DataMapper.repository(repository_name).adapter
-            adapter.create_relationship_constraint(self)
+            adapter.destroy_relationship_constraint(self)
+            self
           end
         end
 
