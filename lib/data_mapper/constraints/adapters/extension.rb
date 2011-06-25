@@ -17,9 +17,8 @@ module DataMapper
 
           if Constraints::Adapters.const_defined?(const_name)
             adapter = const_get(const_name)
-            adapter_constraint_module = Constraints::Adapters.const_get(const_name)
-            adapter.class_eval { include adapter_constraint_module }
-            # adapter.send(:include, constraint_module(const_name))
+            constraint_module = Constraints::Adapters.const_get(const_name)
+            adapter.class_eval { include constraint_module }
           end
         rescue LoadError
           # Silently ignore the fact that no adapter extensions could be required
