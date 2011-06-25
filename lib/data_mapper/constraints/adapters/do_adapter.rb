@@ -84,8 +84,8 @@ module DataMapper
         def destroy_relationship_constraint(relationship)
           return false unless valid_relationship_for_constraint?(relationship)
 
-          storage_name = relationship.source_model.storage_name(name)
-          constraint_name     = constraint_name(storage_name, relationship.name)
+          storage_name    = relationship.source_model.storage_name(name)
+          constraint_name = constraint_name(storage_name, relationship.name)
 
           return false unless constraint_exists?(storage_name, constraint_name)
 
