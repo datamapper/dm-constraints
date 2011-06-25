@@ -1,3 +1,5 @@
+require 'data_mapper/constraints/relationship/one_to_many'
+
 module DataMapper
   module Constraints
     module Relationship
