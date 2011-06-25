@@ -16,6 +16,8 @@ module DataMapper
       private
 
         # @api private
+        # 
+        # @todo rename #auto_migrate_constraints_down!
         def auto_migrate_down_constraints!(repository_name = self.repository_name)
           return unless storage_exists?(repository_name)
           # FIXME: this check should not be here
