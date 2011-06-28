@@ -5,14 +5,17 @@ module DataMapper
     module Adapters
       module AbstractAdapter
 
+        # @api private
         def constraint_exists?(*)
           false
         end
 
+        # @api private
         def create_relationship_constraint(*)
           false
         end
 
+        # @api private
         def destroy_relationship_constraint(*)
           false
         end
