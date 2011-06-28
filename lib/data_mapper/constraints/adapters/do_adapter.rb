@@ -40,28 +40,35 @@ module DataMapper
         def create_relationship_constraint(relationship)
           return false unless valid_relationship_for_constraint?(relationship)
 
-          source_model = relationship.source_model
-          source_table = source_model.storage_name(name)
-          source_key   = relationship.source_key
+          source_storage_name = relationship.source_model.storage_name(name)
+          target_storage_name = relationship.target_model.storage_name(name)
+          constraint_name     = constraint_name(source_storage_name, relationship.name)
 
-          constraint_name = constraint_name(source_table, relationship.name)
-          return false if constraint_exists?(source_table, constraint_name)
+          return false if constraint_exists?(source_storage_name, constraint_name)
 
-          constraint_type = case relationship.inverse.constraint
+          constraint_type =
+            case relationship.inverse.constraint
             when :protect            then 'NO ACTION'
+            # TODO: support :cascade as an option:
+            #   (destroy doesn't communicate the UPDATE constraint)
             when :destroy, :destroy! then 'CASCADE'
             when :set_nil            then 'SET NULL'
-          end
+            end
 
           return false if constraint_type.nil?
 
-          storage_name           = relationship.source_model.storage_name(name)
-          reference_storage_name = relationship.target_model.storage_name(name)
+          source_keys = relationship.source_key.map { |p| property_to_column_name(p, false) }
+          target_keys = relationship.target_key.map { |p| property_to_column_name(p, false) }
 
-          foreign_keys   = relationship.source_key.map { |p| property_to_column_name(p, false) }
-          reference_keys = relationship.target_key.map { |p| property_to_column_name(p, false) }
+          create_constraints_statement = create_constraints_statement(
+            constraint_name,
+            constraint_type,
+            source_storage_name,
+            source_keys,
+            target_storage_name,
+            target_keys)
 
-          execute(create_constraints_statement(storage_name, constraint_name, constraint_type, foreign_keys, reference_storage_name, reference_keys))
+          execute(create_constraints_statement)
         end
 
         ##
@@ -77,16 +84,18 @@ module DataMapper
         def destroy_relationship_constraint(relationship)
           return false unless valid_relationship_for_constraint?(relationship)
 
-          source_model = relationship.source_model
-          source_table = source_model.storage_name(name)
+          storage_name    = relationship.source_model.storage_name(name)
+          constraint_name = constraint_name(storage_name, relationship.name)
 
-          constraint_name = constraint_name(source_table, relationship.name)
-          return false unless constraint_exists?(source_table, constraint_name)
+          return false unless constraint_exists?(storage_name, constraint_name)
 
-          execute(destroy_constraints_statement(source_table, constraint_name))
+          destroy_constraints_statement =
+            destroy_constraints_statement(storage_name, constraint_name)
+
+          execute(destroy_constraints_statement)
         end
 
-        private
+      private
 
         ##
         # Check to see if the relationship's constraints can be used
@@ -110,34 +119,34 @@ module DataMapper
         end
 
         module SQL
-          private
 
-          ##
+        private
+
           # Generates the SQL statement to create a constraint
           #
-          # @param constraint_name [String]
+          # @param [String] constraint_name
           #   name of the foreign key constraint
-          # @param constraint_type [String]
-          #   type of foreign key constraint to add to the table
-          # @param storage_name [String]
-          #   name of table to constrain
-          # @param foreign_keys [Array[String]]
-          #   columns in the table that refer to foreign table
-          # @param reference_storage_name [String]
-          #   table the foreign key refers to
-          # @param reference_storage_name [Array[String]]
-          #   columns the foreign table that are referred to
+          # @param [String] constraint_type
+          #   type of constraint to ALTER source_storage_name with
+          # @param [String] source_storage_name
+          #   name of table to ALTER with constraint
+          # @param [Array(String)] source_keys
+          #   columns in source_storage_name that refer to foreign table
+          # @param [String] target_storage_name
+          #   target table of the constraint
+          # @param [Array(String)] target_keys
+          #   columns the target table that are referred to
           #
           # @return [String]
           #   SQL DDL Statement to create a constraint
           #
           # @api private
-          def create_constraints_statement(storage_name, constraint_name, constraint_type, foreign_keys, reference_storage_name, reference_keys)
+          def create_constraints_statement(constraint_name, constraint_type, source_storage_name, source_keys, target_storage_name, target_keys)
             DataMapper::Ext::String.compress_lines(<<-SQL)
-              ALTER TABLE #{quote_name(storage_name)}
+              ALTER TABLE #{quote_name(source_storage_name)}
               ADD CONSTRAINT #{quote_name(constraint_name)}
-              FOREIGN KEY (#{foreign_keys.join(', ')})
-              REFERENCES #{quote_name(reference_storage_name)} (#{reference_keys.join(', ')})
+              FOREIGN KEY (#{source_keys.join(', ')})
+              REFERENCES #{quote_name(target_storage_name)} (#{target_keys.join(', ')})
               ON DELETE #{constraint_type}
               ON UPDATE #{constraint_type}
             SQL
@@ -146,9 +155,9 @@ module DataMapper
           ##
           # Generates the SQL statement to destroy a constraint
           #
-          # @param storage_name [String]
+          # @param [String] storage_name
           #   name of table to constrain
-          # @param constraint_name [String]
+          # @param [String] constraint_name
           #   name of foreign key constraint
           #
           # @return [String]
@@ -165,9 +174,9 @@ module DataMapper
           ##
           # generates a unique constraint name given a table and a relationships
           #
-          # @param storage_name [String]
+          # @param [String] storage_name
           #   name of table to constrain
-          # @param relationships_name [String]
+          # @param [String] relationship_name
           #   name of the relationship to constrain
           #
           # @return [String]
