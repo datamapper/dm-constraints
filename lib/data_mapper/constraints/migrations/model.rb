@@ -7,13 +7,6 @@ module DataMapper
     module Migrations
       module Model
 
-        # @api public
-        def auto_migrate!(repository_name = self.repository_name)
-          auto_migrate_constraints_down(repository_name)
-          super
-          auto_migrate_constraints_up(repository_name)
-        end
-
         # @api private
         def auto_migrate_constraints_up(repository_name = self.repository_name)
           # TODO: this check should not be here
