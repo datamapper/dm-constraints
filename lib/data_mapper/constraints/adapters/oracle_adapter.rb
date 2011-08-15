@@ -21,7 +21,8 @@ module DataMapper
             AND constraint_name = ?
           SQL
 
-          select(statement, storage_name, constraint_name).first > 0
+          select(statement, oracle_upcase(storage_name)[0, self.class::IDENTIFIER_MAX_LENGTH].gsub('"', '_'), oracle_upcase(constraint_name)[0, self.class::IDENTIFIER_MAX_LENGTH].gsub('"', '_')).first > 0
+
         end
 
 
