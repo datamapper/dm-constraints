@@ -31,12 +31,12 @@ module DataMapper
         # @api private
         # 
         # TODO: is it desirable to always set `INITIALLY DEFERRED DEFERRABLE`?
-        def create_constraints_statement(storage_name, constraint_name, constraint_type, foreign_keys, reference_storage_name, reference_keys)
+        def create_constraints_statement(constraint_name, constraint_type, source_storage_name, source_keys, target_storage_name, target_keys)
           DataMapper::Ext::String.compress_lines(<<-SQL)
-            ALTER TABLE #{quote_name(storage_name)}
+            ALTER TABLE #{quote_name(source_storage_name)}
             ADD CONSTRAINT #{quote_name(constraint_name)}
-            FOREIGN KEY (#{foreign_keys.join(', ')})
-            REFERENCES #{quote_name(reference_storage_name)} (#{reference_keys.join(', ')})
+            FOREIGN KEY (#{source_keys.join(', ')})
+            REFERENCES #{quote_name(target_storage_name)} (#{target_keys.join(', ')})
             INITIALLY DEFERRED DEFERRABLE
           SQL
         end
