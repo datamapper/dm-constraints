@@ -3,14 +3,14 @@ module DataMapper
     module Adapters
       module Extension
         # Include the corresponding Constraints module into a adapter class
-        # 
+        #
         # @param [Symbol] const_name
         #   demodulized name of the adapter class to include corresponding
         #   constraints module into
-        # 
+        #
         # TODO: come up with a better way to include modules
         # into all currently loaded and subsequently loaded Adapters
-        # 
+        #
         # @api private
         def include_constraint_api(const_name)
           require constraint_extensions(const_name)
