@@ -4,14 +4,14 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{dm-constraints}
+  s.name = "dm-constraints"
   s.version = "1.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Dirkjan Bussink"]
-  s.date = %q{2011-04-28}
-  s.description = %q{DataMapper plugin constraining relationships}
-  s.email = %q{d.bussink [a] gmail [d] com}
+  s.date = "2011-09-01"
+  s.description = "DataMapper plugin constraining relationships"
+  s.email = "d.bussink [a] gmail [d] com"
   s.extra_rdoc_files = [
     "LICENSE",
     "README.rdoc"
@@ -23,20 +23,21 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION",
     "dm-constraints.gemspec",
-    "lib/dm-constraints.rb",
     "lib/data_mapper/constraints/adapters/abstract_adapter.rb",
     "lib/data_mapper/constraints/adapters/do_adapter.rb",
+    "lib/data_mapper/constraints/adapters/extension.rb",
     "lib/data_mapper/constraints/adapters/mysql_adapter.rb",
     "lib/data_mapper/constraints/adapters/oracle_adapter.rb",
     "lib/data_mapper/constraints/adapters/postgres_adapter.rb",
     "lib/data_mapper/constraints/adapters/sqlite_adapter.rb",
     "lib/data_mapper/constraints/adapters/sqlserver_adapter.rb",
-    "lib/data_mapper/constraints/resource.rb",
     "lib/data_mapper/constraints/migrations/model.rb",
     "lib/data_mapper/constraints/migrations/relationship.rb",
     "lib/data_mapper/constraints/migrations/singleton_methods.rb",
     "lib/data_mapper/constraints/relationship/many_to_many.rb",
     "lib/data_mapper/constraints/relationship/one_to_many.rb",
+    "lib/data_mapper/constraints/resource.rb",
+    "lib/dm-constraints.rb",
     "spec/integration/constraints_spec.rb",
     "spec/isolated/require_after_setup_spec.rb",
     "spec/isolated/require_before_setup_spec.rb",
@@ -48,38 +49,31 @@ Gem::Specification.new do |s|
     "tasks/yard.rake",
     "tasks/yardstick.rake"
   ]
-  s.homepage = %q{http://github.com/datamapper/dm-constraints}
+  s.homepage = "http://github.com/datamapper/dm-constraints"
   s.require_paths = ["lib"]
-  s.rubyforge_project = %q{datamapper}
-  s.rubygems_version = %q{1.6.2}
-  s.summary = %q{DataMapper plugin constraining relationships}
-  s.test_files = [
-    "spec/integration/constraints_spec.rb",
-    "spec/isolated/require_after_setup_spec.rb",
-    "spec/isolated/require_before_setup_spec.rb",
-    "spec/isolated/require_spec.rb",
-    "spec/spec_helper.rb"
-  ]
+  s.rubyforge_project = "datamapper"
+  s.rubygems_version = "1.8.10"
+  s.summary = "DataMapper plugin constraining relationships"
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<dm-core>, ["~> 1.1.0"])
-      s.add_development_dependency(%q<jeweler>, ["~> 1.5.2"])
-      s.add_development_dependency(%q<rake>, ["~> 0.8.7"])
-      s.add_development_dependency(%q<rspec>, ["~> 1.3.1"])
+      s.add_development_dependency(%q<jeweler>, ["~> 1.6.4"])
+      s.add_development_dependency(%q<rake>, ["~> 0.9.2"])
+      s.add_development_dependency(%q<rspec>, ["~> 1.3.2"])
     else
       s.add_dependency(%q<dm-core>, ["~> 1.1.0"])
-      s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
-      s.add_dependency(%q<rake>, ["~> 0.8.7"])
-      s.add_dependency(%q<rspec>, ["~> 1.3.1"])
+      s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
+      s.add_dependency(%q<rake>, ["~> 0.9.2"])
+      s.add_dependency(%q<rspec>, ["~> 1.3.2"])
     end
   else
     s.add_dependency(%q<dm-core>, ["~> 1.1.0"])
-    s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
-    s.add_dependency(%q<rake>, ["~> 0.8.7"])
-    s.add_dependency(%q<rspec>, ["~> 1.3.1"])
+    s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
+    s.add_dependency(%q<rake>, ["~> 0.9.2"])
+    s.add_dependency(%q<rspec>, ["~> 1.3.2"])
   end
 end
 
