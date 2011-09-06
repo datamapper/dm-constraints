@@ -28,15 +28,13 @@ module DataMapper
         # @see DataMapper::Constraints::Adapters::DataObjectsAdapter#create_constraints_statement
         #
         # @api private
-        #
-        # TODO: is it desirable to always set `INITIALLY DEFERRED DEFERRABLE`?
-        def create_constraints_statement(storage_name, constraint_name, constraint_type, foreign_keys, reference_storage_name, reference_keys)
+        def create_constraints_statement(storage_name, constraint_name, constraint_type, deferrable, foreign_keys, reference_storage_name, reference_keys)
           DataMapper::Ext::String.compress_lines(<<-SQL)
             ALTER TABLE #{quote_name(storage_name)}
             ADD CONSTRAINT #{quote_name(constraint_name)}
             FOREIGN KEY (#{foreign_keys.join(', ')})
             REFERENCES #{quote_name(reference_storage_name)} (#{reference_keys.join(', ')})
-            INITIALLY DEFERRED DEFERRABLE
+            #{deferrable}
           SQL
         end
 

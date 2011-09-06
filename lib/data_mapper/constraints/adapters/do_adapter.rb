@@ -57,12 +57,21 @@ module DataMapper
 
           return false if constraint_type.nil?
 
+          deferrable_control =
+            case relationship.inverse.constraint_deferrable
+            when true, :initially_deferred
+              'DEFERRABLE INITIALLY DEFERRED'
+            when :initially_immediate
+              'DEFERRABLE INITIALLY IMMEDIATE'
+            end
+
           source_keys = relationship.source_key.map { |p| property_to_column_name(p, false) }
           target_keys = relationship.target_key.map { |p| property_to_column_name(p, false) }
 
           create_constraints_statement = create_constraints_statement(
             constraint_name,
             constraint_type,
+            deferrable_control,
             source_storage_name,
             source_keys,
             target_storage_name,
@@ -128,6 +137,8 @@ module DataMapper
           #   name of the foreign key constraint
           # @param [String] constraint_type
           #   type of constraint to ALTER source_storage_name with
+          # @param [String,nil] deferrable
+          #   the SQL string indicating the deferrablity of the constraint
           # @param [String] source_storage_name
           #   name of table to ALTER with constraint
           # @param [Array(String)] source_keys
@@ -141,7 +152,7 @@ module DataMapper
           #   SQL DDL Statement to create a constraint
           #
           # @api private
-          def create_constraints_statement(constraint_name, constraint_type, source_storage_name, source_keys, target_storage_name, target_keys)
+          def create_constraints_statement(constraint_name, constraint_type, deferrable, source_storage_name, source_keys, target_storage_name, target_keys)
             DataMapper::Ext::String.compress_lines(<<-SQL)
               ALTER TABLE #{quote_name(source_storage_name)}
               ADD CONSTRAINT #{quote_name(constraint_name)}
@@ -149,6 +160,7 @@ module DataMapper
               REFERENCES #{quote_name(target_storage_name)} (#{target_keys.join(', ')})
               ON DELETE #{constraint_type}
               ON UPDATE #{constraint_type}
+              #{deferrable}
             SQL
           end
 

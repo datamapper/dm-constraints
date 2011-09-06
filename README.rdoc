@@ -19,7 +19,6 @@ pure ruby.
 
 By default a relationship will PROTECT its children.
 
-
 === Cardinality Notes
  * 1:1
   * Applicable constraints: [:set_nil, :skip, :protect, :destroy]
@@ -31,13 +30,24 @@ By default a relationship will PROTECT its children.
   * Applicable constraints: [:skip, :protect, :destroy, :destroy!]
 
 
+=== Deferrability
+
+Optionally, a constraint may be made deferrable. This only affects the generated
+DDL, not any behavior in ruby. Set deferrability by adding the option
++:constraint_deferrable+ to the relationship with one of these values:
+
+  - false                         constraint is always evaluated immediately; it may not be deferred
+                                  (default)
+  - true or :initially_deferred   constraint may be deferred and is deferred by default
+  - :initially_immediate          constraint may be deferred but is immediate by default
+
 === Examples
 
   # 1:M Example
   class Post
     has n, :comments
     # equivalent to:
-    # has n, :comments, :constraint => :protect
+    # has n, :comments, :constraint => :protect, :constraint_deferrable => false
   end
 
   # M:M Example
