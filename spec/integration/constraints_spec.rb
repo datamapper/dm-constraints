@@ -626,12 +626,12 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
         end
       end
 
-      # TODO: it's mostly the test itself which only works on
-      # PostgreSQL and MySQL (and any other database which has FKs and
-      # information_schema). The feature itself will work on any
-      # database that supports [NOT ]DEFERRABLE and INITIALLY
-      # [DEFERRED|IMMEDIATE], including, e.g., Oracle.
-      supported_by :postgres, :mysql do
+      # TODO: it's mostly the test itself which is only known to work
+      # on PostgreSQL. The feature itself will work on any database
+      # that supports [NOT ]DEFERRABLE and INITIALLY
+      # [DEFERRED|IMMEDIATE], including, e.g., Oracle, but excluding,
+      # e.g., MySQL.
+      supported_by :postgres do
         describe 'with :constraint_deferrable =>' do
           def deferrability_metadata(relationship)
             adapter = DataMapper.repository(:default).adapter
