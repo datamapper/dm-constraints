@@ -9,9 +9,9 @@ module DataMapper
 
         # oracle does not provide the information_schema table
         # To question internal state like postgres or mysql
-        # 
+        #
         # @see DataMapper::Constraints::Adapters::DataObjectsAdapter
-        # 
+        #
         # @api private
         def constraint_exists?(storage_name, constraint_name)
           statement = DataMapper::Ext::String.compress_lines(<<-SQL)
@@ -27,9 +27,9 @@ module DataMapper
 
 
         # @see DataMapper::Constraints::Adapters::DataObjectsAdapter#create_constraints_statement
-        # 
+        #
         # @api private
-        # 
+        #
         # TODO: is it desirable to always set `INITIALLY DEFERRED DEFERRABLE`?
         def create_constraints_statement(constraint_name, constraint_type, source_storage_name, source_keys, target_storage_name, target_keys)
           DataMapper::Ext::String.compress_lines(<<-SQL)
