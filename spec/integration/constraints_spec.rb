@@ -625,6 +625,120 @@ describe 'DataMapper::Constraints', "(with #{DataMapper::Spec.adapter_name})" do
           end.should raise_error(ArgumentError)
         end
       end
+
+      # TODO: it's mostly the test itself which is only known to work
+      # on PostgreSQL. The feature itself will work on any database
+      # that supports [NOT ]DEFERRABLE and INITIALLY
+      # [DEFERRED|IMMEDIATE], including, e.g., Oracle, but excluding,
+      # e.g., MySQL.
+      supported_by :postgres do
+        describe 'with :constraint_deferrable =>' do
+          def deferrability_metadata(relationship)
+            adapter = DataMapper.repository(:default).adapter
+            constraint_name = # use private method from this lib for robustness
+              adapter.send(:constraint_name, relationship.child_model.storage_name, relationship.name)
+            adapter.select(
+              "SELECT is_deferrable, initially_deferred FROM information_schema.table_constraints WHERE constraint_name=?",
+              constraint_name).first
+          end
+
+          shared_examples_for 'not deferred' do
+            it 'is not deferrable' do
+              deferrability_metadata(Comment.relationships[:article]).is_deferrable.should == 'NO'
+            end
+
+            it 'is initially immediate' do
+              deferrability_metadata(Comment.relationships[:article]).initially_deferred.should == 'NO'
+            end
+          end
+
+          shared_examples_for 'all deferred' do
+            it 'is deferrable' do
+              deferrability_metadata(Comment.relationships[:article]).is_deferrable.should == 'YES'
+            end
+
+            it 'is initially deferred' do
+              deferrability_metadata(Comment.relationships[:article]).initially_deferred.should == 'YES'
+            end
+          end
+
+          describe 'not set' do
+            before :all do
+              class ::Article
+                has n, :comments
+              end
+
+              class ::Comment
+                belongs_to :article
+              end
+            end
+
+            it_should_behave_like 'not deferred'
+          end
+
+          describe 'false' do
+            before :all do
+              class ::Article
+                has n, :comments, :constraint_deferrable => false
+              end
+
+              class ::Comment
+                belongs_to :article
+              end
+            end
+
+            it_should_behave_like 'not deferred'
+          end
+
+          describe 'true' do
+            before :all do
+              class ::Article
+                has n, :comments, :constraint_deferrable => true
+              end
+
+              class ::Comment
+                belongs_to :article
+              end
+            end
+
+            it_should_behave_like 'all deferred'
+          end
+
+          describe ':initially_deferred' do
+            before :all do
+              class ::Article
+                has n, :comments, :constraint_deferrable => :initially_deferred
+              end
+
+              class ::Comment
+                belongs_to :article
+              end
+            end
+
+            it_should_behave_like 'all deferred'
+          end
+
+          describe ':initially_immediate' do
+            before :all do
+              class ::Article
+                has n, :comments, :constraint_deferrable => :initially_immediate
+              end
+
+              class ::Comment
+                belongs_to :article
+              end
+            end
+
+            it 'is deferrable' do
+              deferrability_metadata(Comment.relationships[:article]).is_deferrable.should == 'YES'
+            end
+
+            it 'is initially immediate' do
+              deferrability_metadata(Comment.relationships[:article]).initially_deferred.should == 'NO'
+            end
+          end
+        end
+      end
     end
   end
 end

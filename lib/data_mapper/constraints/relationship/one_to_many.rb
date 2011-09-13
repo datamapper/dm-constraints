@@ -4,6 +4,7 @@ module DataMapper
       module OneToMany
 
         attr_reader :constraint
+        attr_reader :constraint_deferrable
 
         # @api private
         def enforce_destroy_constraint(resource)
@@ -28,7 +29,7 @@ module DataMapper
       private
 
         ##
-        # Adds the delete constraint options to a relationship
+        # Adds the delete & defer constraint options to a relationship
         #
         # @param params [*ARGS] Arguments passed to Relationship#initialize
         #
@@ -43,6 +44,7 @@ module DataMapper
 
         def set_constraint
           @constraint = @options.fetch(:constraint, :protect) || :skip
+          @constraint_deferrable = @options.fetch(:constraint_deferrable, false)
         end
 
         # Checks that the constraint type is appropriate to the relationship
@@ -68,6 +70,11 @@ module DataMapper
 
           unless VALID_CONSTRAINT_VALUES.include?(@constraint)
             raise ArgumentError, ":constraint option must be one of #{VALID_CONSTRAINT_VALUES.to_a.join(', ')}"
+          end
+
+          return unless @constraint_validation
+          unless VALID_DEFERABLE_VALUES.include?(@constraint_validation)
+            raise ArgumentError, ":constraint_validation option must be one of #{VALID_DEFERABLE_VALUES.to_a.collect(&:inspect).join(', ')}"
           end
         end
 
