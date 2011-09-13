@@ -19,7 +19,7 @@ module DataMapper
         #   name of relationship to evaluate constraint of
         # @param [Hash] options
         #   options hash
-        # 
+        #
         # @option *args :constraint[Symbol]
         #   one of VALID_CONSTRAINT_VALUES
         #

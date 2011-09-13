@@ -36,7 +36,7 @@ By default a relationship will PROTECT its children.
   # 1:M Example
   class Post
     has n, :comments
-    # equivalent to: 
+    # equivalent to:
     # has n, :comments, :constraint => :protect
   end
 
