@@ -37,6 +37,7 @@ module DataMapper
             ADD CONSTRAINT #{quote_name(constraint_name)}
             FOREIGN KEY (#{source_keys.join(', ')})
             REFERENCES #{quote_name(target_storage_name)} (#{target_keys.join(', ')})
+            #{"ON DELETE " + constraint_type if constraint_type && constraint_type != "NO ACTION"}
             INITIALLY DEFERRED DEFERRABLE
           SQL
         end
