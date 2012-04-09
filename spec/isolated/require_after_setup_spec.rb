@@ -1,4 +1,6 @@
+require 'backports'
 require 'spec'
+
 require 'isolated/require_spec'
 require 'dm-core/spec/setup'
 require 'dm-core/spec/lib/adapter_helpers'

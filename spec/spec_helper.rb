@@ -1,4 +1,4 @@
-require 'rubygems'
+require 'backports'
 
 require 'dm-core/spec/setup'
 require 'dm-core/spec/lib/spec_helper'
