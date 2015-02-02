@@ -1,0 +1,22 @@
+language: ruby
+sudo: false
+services:
+  - mysql
+before_script:
+  - "bundle exec rake db:create"
+before_install:
+  - gem install bundler
+script: "bundle exec rake spec"
+env:
+  - "ADAPTER=in_memory"
+  - "ADAPTER=yaml"
+  - "ADAPTER=sqlite"
+  - "ADAPTER=mysql DM_DB_USER=root DM_DB_PASSWORD=''"
+rvm:
+  - 1.9.3
+  - 2.0.0
+  - 2.1.5
+  - 2.2.0
+matrix:
+  allow_failures:
+    - rvm: 2.2.0
